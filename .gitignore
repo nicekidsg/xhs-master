@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.DS_Store
+app/data/*.db
+app/data/*.db-*
+app/data/browser-profile/
+app/data/generated/
+*.pyc

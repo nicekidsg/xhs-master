@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}准备发布{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Publish Prep</p>
+    <h1>发布前最终确认</h1>
+  </div>
+  <span class="status large">{{ draft.status }}</span>
+</section>
+
+<section class="grid two">
+  <article class="panel">
+    <h2>发布信息</h2>
+    <dl class="details">
+      <dt>标题</dt><dd>{{ draft.selected_title }}</dd>
+      <dt>排期</dt><dd>{{ schedule.scheduled_at }} {{ schedule.timezone }}</dd>
+      <dt>标签</dt><dd>{% for tag in draft.tags %}#{{ tag }} {% endfor %}</dd>
+    </dl>
+  </article>
+  <article class="panel">
+    <h2>上传素材</h2>
+    <div class="asset-list">
+      {% for asset in assets %}
+      <a href="{{ asset_url(asset.path) }}" target="_blank">{{ asset.description }}</a>
+      {% endfor %}
+    </div>
+  </article>
+</section>
+
+<form class="actions" method="post" action="/publish/{{ schedule.id }}/prepare">
+  <button class="button primary" type="submit">打开小红书并填入内容</button>
+  <p class="muted">系统会停在最终确认前，请人工核对页面内容后再点击发布或定时。</p>
+</form>
+{% endblock %}
+

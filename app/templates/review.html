@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}审核草稿{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Review</p>
+    <h1>{{ draft.selected_title }}</h1>
+  </div>
+  <span class="status large">{{ draft.status }}</span>
+</section>
+
+<section class="grid two">
+  <article class="panel">
+    <h2>图文笔记</h2>
+    <div class="title-options">
+      {% for title in draft.title_options %}
+      <span>{{ title }}</span>
+      {% endfor %}
+    </div>
+    <pre class="copy">{{ draft.body }}</pre>
+    <p class="tags">{% for tag in draft.tags %}#{{ tag }} {% endfor %}</p>
+  </article>
+
+  <article class="panel">
+    <h2>短视频脚本</h2>
+    <div class="script-list">
+      {% for scene in draft.video_script %}
+      <div>
+        <strong>{{ scene.scene }}. {{ scene.subtitle }}</strong>
+        <p>{{ scene.visual }}</p>
+        <small>{{ scene.voiceover }}</small>
+      </div>
+      {% endfor %}
+    </div>
+  </article>
+</section>
+
+<section class="grid two">
+  <article class="panel">
+    <h2>风险检查</h2>
+    <ul class="check-list">
+      {% for note in draft.risk_notes %}
+      <li>{{ note }}</li>
+      {% endfor %}
+    </ul>
+  </article>
+  <article class="panel">
+    <h2>素材预览</h2>
+    {% if assets %}
+    <div class="asset-grid">
+      {% for asset in assets %}
+      <a href="{{ asset_url(asset.path) }}" target="_blank">
+        {% if asset.kind == "image" %}
+        <img src="{{ asset_url(asset.path) }}" alt="{{ asset.description }}">
+        {% else %}
+        <span>{{ asset.description }}</span>
+        {% endif %}
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="muted">还没有生成素材。</p>
+    {% endif %}
+  </article>
+</section>
+
+<section class="actions">
+  <form method="post" action="/drafts/{{ draft.id }}/assets"><button class="button">生成图片/视频包</button></form>
+  <form method="post" action="/drafts/{{ draft.id }}/approve"><button class="button primary">审核通过并排期</button></form>
+</section>
+{% endblock %}
+

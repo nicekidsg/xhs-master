@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}工作台{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Local Ops Console</p>
+    <h1>今日内容生产台</h1>
+  </div>
+  <a class="button primary" href="/topics/new">新建主题</a>
+</section>
+
+<section class="metrics">
+  <div><span>热点候选</span><strong>{{ hotspots|length }}</strong></div>
+  <div><span>近期草稿</span><strong>{{ drafts|length }}</strong></div>
+  <div><span>待排期</span><strong>{{ schedules|length }}</strong></div>
+</section>
+
+<section class="grid two">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>今日热点</h2>
+      <form method="post" action="/hotspots/refresh"><button class="icon-button" title="刷新热点">↻</button></form>
+    </div>
+    <div class="list">
+      {% for item in hotspots %}
+      <article class="row">
+        <div>
+          <strong>{{ item.title }}</strong>
+          <p>{{ item.source }} · {{ item.heat }} · {{ item.tags }}</p>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    <form class="inline-form" method="post" action="/hotspots/manual">
+      <input name="source" value="人工补充" aria-label="来源">
+      <input name="title" placeholder="补充一个小红书站内观察或选题" aria-label="标题" required>
+      <input name="tags" placeholder="标签" aria-label="标签">
+      <button>添加</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>待推进草稿</h2></div>
+    <div class="list">
+      {% for draft in drafts %}
+      <a class="row link-row" href="/drafts/{{ draft.id }}">
+        <div>
+          <strong>{{ draft.selected_title }}</strong>
+          <p>{{ draft.core_theme }} · {{ draft.content_format }}</p>
+        </div>
+        <span class="status">{{ draft.status }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2>排期队列</h2></div>
+  <table>
+    <thead><tr><th>标题</th><th>时间</th><th>状态</th><th></th></tr></thead>
+    <tbody>
+      {% for item in schedules %}
+      <tr>
+        <td>{{ item.selected_title }}</td>
+        <td>{{ item.scheduled_at }} {{ item.timezone }}</td>
+        <td><span class="status">{{ item.status }}</span></td>
+        <td><a href="/publish/{{ item.id }}">准备发布</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
+

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Mock 发布页{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Mock</p>
+    <h1>本地发布页测试桩</h1>
+  </div>
+</section>
+<form class="panel form-stack narrow">
+  <label>标题<input aria-label="标题" name="title"></label>
+  <label>正文<textarea aria-label="正文" name="body"></textarea></label>
+  <label>发布时间<input aria-label="发布时间" name="schedule"></label>
+  <label>素材<input type="file" multiple></label>
+  <button type="button" class="button primary">最终确认按钮</button>
+</form>
+{% endblock %}
+

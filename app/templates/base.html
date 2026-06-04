@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}小红书内容控制台{% endblock %}</title>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <aside class="sidebar">
+      <a class="brand" href="/">
+        <span class="brand-mark">X</span>
+        <span>
+          <strong>小红书起号</strong>
+          <small>AI/效率工具</small>
+        </span>
+      </a>
+      <nav>
+        <a href="/">工作台</a>
+        <a href="/topics/new">新建主题</a>
+        <a href="https://creator.xiaohongshu.com/" target="_blank" rel="noreferrer">创作服务平台</a>
+      </nav>
+      <div class="sidebar-note">
+        <span>默认排期</span>
+        <strong>{{ settings.default_publish_time }} {{ settings.timezone }}</strong>
+      </div>
+    </aside>
+    <main class="main">
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>
+

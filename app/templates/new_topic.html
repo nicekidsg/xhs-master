@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}新建主题{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Create</p>
+    <h1>输入核心主题</h1>
+  </div>
+</section>
+
+<form class="panel form-stack" method="post" action="/topics">
+  <label>
+    核心主题
+    <input name="core_theme" placeholder="例如：AI 帮我 15 分钟完成竞品分析" required>
+  </label>
+  <label>
+    内容形态
+    <select name="content_format">
+      <option selected>图文+短视频</option>
+      <option>图文笔记</option>
+      <option>短视频</option>
+    </select>
+  </label>
+  <div>
+    <span class="label">引用热点</span>
+    <div class="choice-grid">
+      {% for item in hotspots %}
+      <label class="check-card">
+        <input type="checkbox" name="hotspot_ids" value="{{ item.id }}">
+        <span>
+          <strong>{{ item.title }}</strong>
+          <small>{{ item.source }} · {{ item.tags }}</small>
+        </span>
+      </label>
+      {% endfor %}
+    </div>
+  </div>
+  <button class="button primary" type="submit">生成脚本与文案</button>
+</form>
+{% endblock %}
+
