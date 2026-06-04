@@ -122,6 +122,24 @@ def refresh_hotspots():
     return RedirectResponse("/", status_code=303)
 
 
+@app.post("/hotspots/draft")
+def create_hotspot_draft_form(
+    hotspot_ids: Annotated[Optional[List[int]], Form()] = None,
+):
+    selected_ids = hotspot_ids or []
+    selected_hotspots = _hotspots_for_ids(selected_ids)
+    if not selected_hotspots:
+        return RedirectResponse("/", status_code=303)
+
+    topic_id = store.create_topic(
+        _core_theme_from_hotspots(selected_hotspots),
+        "图文+短视频",
+        selected_ids,
+    )
+    draft_id = _generate_draft_for_topic(topic_id)
+    return RedirectResponse(f"/drafts/{draft_id}", status_code=303)
+
+
 @app.get("/drafts/{draft_id}", response_class=HTMLResponse)
 def review_draft(request: Request, draft_id: int):
     draft = _draft_or_404(draft_id)
@@ -276,6 +294,16 @@ def _generate_draft_for_topic(topic_id: int) -> int:
     provider = build_provider()
     content = provider.generate(topic, selected)
     return store.create_draft(topic_id, content)
+
+
+def _hotspots_for_ids(hotspot_ids: list[int]) -> list[dict]:
+    wanted = set(hotspot_ids)
+    return [item for item in store.list_hotspots(100) if item["id"] in wanted]
+
+
+def _core_theme_from_hotspots(hotspots: list[dict]) -> str:
+    titles = [item["title"] for item in hotspots[:3]]
+    return "、".join(titles)
 
 
 def _draft_or_404(draft_id: int) -> dict:

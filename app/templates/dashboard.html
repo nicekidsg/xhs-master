@@ -21,16 +21,22 @@
       <h2>今日热点</h2>
       <form method="post" action="/hotspots/refresh"><button class="icon-button" title="刷新热点">↻</button></form>
     </div>
-    <div class="list">
-      {% for item in hotspots %}
-      <article class="row">
-        <div>
-          <strong>{{ item.title }}</strong>
-          <p>{{ item.source }} · {{ item.heat }} · {{ item.tags }}</p>
-        </div>
-      </article>
-      {% endfor %}
-    </div>
+    <form method="post" action="/hotspots/draft">
+      <div class="list">
+        {% for item in hotspots %}
+        <label class="row selectable-row">
+          <input type="checkbox" name="hotspot_ids" value="{{ item.id }}">
+          <span>
+            <strong>{{ item.title }}</strong>
+            <small>{{ item.source }} · {{ item.heat }} · {{ item.tags }}</small>
+          </span>
+        </label>
+        {% endfor %}
+      </div>
+      <div class="panel-actions">
+        <button class="button primary" type="submit">生成草稿</button>
+      </div>
+    </form>
     <form class="inline-form" method="post" action="/hotspots/manual">
       <input name="source" value="人工补充" aria-label="来源">
       <input name="title" placeholder="补充一个小红书站内观察或选题" aria-label="标题" required>
@@ -72,4 +78,3 @@
   </table>
 </section>
 {% endblock %}
-
